@@ -43,7 +43,6 @@ paths:
             example: 2
             
       responses:
-        
         200:
           description:  Successful pull of info
           content:
