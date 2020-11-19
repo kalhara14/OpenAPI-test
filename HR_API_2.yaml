@@ -1,0 +1,114 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: HR
+  description: test
+  termsOfService: https://smartbear.com/terms-of-use
+  contact:
+    name: kalhara
+    url: smartbear.com
+    email: test@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://apache.com
+
+servers: 
+  - url: https://dev.foo.com/v1
+    description: Dev Server
+    
+  - url: https://prod.foo.com/v1
+    description: Production Server
+
+paths:
+  /employees:
+    get:
+      description: get employees information from HR Data Base
+      parameters: 
+        - name: bodylimit
+          in: query
+          description: The amount of employees returned
+          schema:
+            type: integer
+            minimum: 10
+            maximum: 20
+            example: 15
+            
+        - name: pagelimit
+          in: query
+          description: The amount of pages returned
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 5
+            example: 2
+            
+      responses:
+        
+        200:
+          description:  Successful pull of info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employees'
+                    
+    post:
+      description: create a new employee in the db
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Employee'
+          application/xml:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Employee'    
+      responses:
+        200:
+          description: Employee created successfully
+  /employees/{id}:
+    get:
+      description: Obtain info specific employee
+      parameters: 
+        - in: path
+          name: id
+          required: true
+          description: the ID of the employee
+          schema:
+            type: integer
+            example: 54
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Employee'
+                
+            application/xml:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Employee'
+components:
+  schemas:
+    Employee:
+      description: Model containting employee info
+      properties:
+        id:
+          type: integer
+          example: 5
+        employee_name:
+          type: string
+          example: Kalhara123
+        
+        employee_title:
+          type: string
+          example: Intern-HMS
+    
+    Employees:
+      description: array employees info
+      type: array
+      items:
+        $ref: '#/components/schemas/Employee'
